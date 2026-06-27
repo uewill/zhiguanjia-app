@@ -1,0 +1,129 @@
+{
+  "report_time": "2026-06-26T23:57:19.984353",
+  "start_time": "2026-06-26T23:57:19.856685",
+  "duration_seconds": 0.127668,
+  "test_cycles": 1,
+  "results": [
+    {
+      "type": "flutter_analyze",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: 'flutter'",
+      "cycle": 1,
+      "timestamp": "2026-06-26T23:57:19.984331"
+    },
+    {
+      "type": "flutter_test_files",
+      "status": "fail",
+      "files": [
+        {
+          "file": "integration_test/full_workflow_ui_test.dart",
+          "exists": true,
+          "size": 12627
+        },
+        {
+          "file": "integration_test/app_test.dart",
+          "exists": false,
+          "size": 0
+        }
+      ],
+      "cycle": 1,
+      "timestamp": "2026-06-26T23:57:19.984335"
+    },
+    {
+      "type": "api_health",
+      "status": "fail",
+      "code": 403,
+      "response_time": 0.007505,
+      "cycle": 1,
+      "timestamp": "2026-06-26T23:57:19.984337"
+    },
+    {
+      "type": "api_crud",
+      "status": "fail",
+      "create": false,
+      "read": false,
+      "test_code": "TEST39962",
+      "cycle": 1,
+      "timestamp": "2026-06-26T23:57:19.984340"
+    },
+    {
+      "type": "web_health",
+      "status": "fail",
+      "code": 403,
+      "content_length": 0,
+      "cycle": 1,
+      "timestamp": "2026-06-26T23:57:19.984341"
+    },
+    {
+      "type": "source_files",
+      "status": "fail",
+      "modules": {
+        "销售模块": {
+          "status": "fail",
+          "files": [
+            {
+              "file": "lib/app/modules/sale/views/sale_view.dart",
+              "exists": false
+            },
+            {
+              "file": "lib/app/modules/sale/views/order_create_view.dart",
+              "exists": false
+            }
+          ]
+        },
+        "库存模块": {
+          "status": "pass",
+          "files": [
+            {
+              "file": "lib/app/modules/inventory/views/inventory_view.dart",
+              "exists": true
+            },
+            {
+              "file": "lib/app/modules/inventory/views/inventory_transfer_view.dart",
+              "exists": true
+            },
+            {
+              "file": "lib/app/modules/inventory/views/stock_check_view.dart",
+              "exists": true
+            }
+          ]
+        },
+        "采购模块": {
+          "status": "fail",
+          "files": [
+            {
+              "file": "lib/app/modules/purchase/views/purchase_view.dart",
+              "exists": false
+            },
+            {
+              "file": "lib/app/modules/purchase/views/purchase_create_view.dart",
+              "exists": true
+            }
+          ]
+        },
+        "客户模块": {
+          "status": "fail",
+          "files": [
+            {
+              "file": "lib/app/modules/customer/views/customer_list_view.dart",
+              "exists": true
+            },
+            {
+              "file": "lib/app/modules/customer/views/customer_form_view.dart",
+              "exists": false
+            }
+          ]
+        }
+      },
+      "cycle": 1,
+      "timestamp": "2026-06-26T23:57:19.984343"
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "pass": 0,
+    "fail": 5,
+    "error": 1,
+    "pass_rate": "0.0%"
+  }
+}

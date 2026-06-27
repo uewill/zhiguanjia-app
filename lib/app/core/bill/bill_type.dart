@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+
+/// 单据类型策略配置
+/// 使用策略模式封装不同单据类型的差异
+enum BillType {
+  purchase(
+    code: 'purchase',
+    name: '采购单',
+    title: '新建采购单',
+    icon: Icons.shopping_cart,
+    primaryColor: Color(0xFF2196F3),
+    requiresPartner: true,
+    requiresWarehouse: true,
+    requiresAmount: true,
+    partnerLabel: '供应商',
+    warehouseLabel: '入库仓库',
+    itemsLabel: '采购商品',
+    payableLabel: '应付金额',
+    paidLabel: '实付金额',
+    submitText: '提交订单',
+    apiEndpoint: '/purchase-orders',
+  ),
+  sales(
+    code: 'sales',
+    name: '销售单',
+    title: '新建销售单',
+    icon: Icons.point_of_sale,
+    primaryColor: Color(0xFF9C27B0),
+    requiresPartner: true,
+    requiresWarehouse: true,
+    requiresAmount: true,
+    partnerLabel: '客户',
+    warehouseLabel: '出库仓库',
+    itemsLabel: '销售商品',
+    payableLabel: '应收金额',
+    paidLabel: '实收金额',
+    submitText: '提交订单',
+    apiEndpoint: '/sale-orders',
+  ),
+  transfer(
+    code: 'transfer',
+    name: '调拨单',
+    title: '新建调拨单',
+    icon: Icons.swap_horiz,
+    primaryColor: Color(0xFFFF9800),
+    requiresPartner: false,
+    requiresWarehouse: true,
+    requiresAmount: false,
+    partnerLabel: null,
+    warehouseLabel: '调出仓库',
+    itemsLabel: '调拨商品',
+    payableLabel: null,
+    paidLabel: null,
+    submitText: '提交调拨单',
+    apiEndpoint: '/transfers',
+  ),
+  stockCheck(
+    code: 'stock_check',
+    name: '盘点单',
+    title: '新建盘点单',
+    icon: Icons.inventory_2,
+    primaryColor: Color(0xFF4CAF50),
+    requiresPartner: false,
+    requiresWarehouse: true,
+    requiresAmount: false,
+    partnerLabel: null,
+    warehouseLabel: '盘点仓库',
+    itemsLabel: '盘点明细',
+    payableLabel: null,
+    paidLabel: null,
+    submitText: '开始盘点',
+    apiEndpoint: '/stock-checks',
+  );
+
+  final String code;
+  final String name;
+  final String title;
+  final IconData icon;
+  final Color primaryColor;
+  final bool requiresPartner;
+  final bool requiresWarehouse;
+  final bool requiresAmount;
+  final String? partnerLabel;
+  final String warehouseLabel;
+  final String itemsLabel;
+  final String? payableLabel;
+  final String? paidLabel;
+  final String submitText;
+  final String apiEndpoint;
+
+  const BillType({
+    required this.code,
+    required this.name,
+    required this.title,
+    required this.icon,
+    required this.primaryColor,
+    required this.requiresPartner,
+    required this.requiresWarehouse,
+    required this.requiresAmount,
+    required this.partnerLabel,
+    required this.warehouseLabel,
+    required this.itemsLabel,
+    required this.payableLabel,
+    required this.paidLabel,
+    required this.submitText,
+    required this.apiEndpoint,
+  });
+}

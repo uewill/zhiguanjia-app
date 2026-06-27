@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智掌柜 - 库存状况表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .card-label {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .card-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+        .card-value.success { color: #52c41a; }
+        .card-value.warning { color: #faad14; }
+        .card-value.danger { color: #f5222d; }
+        .card-change {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .change-positive { color: #52c41a; }
+        .change-negative { color: #f5222d; }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th {
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 500;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 2px solid #e8e8e8;
+        }
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+        tr:hover td {
+            background: #fafafa;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .tag-sku {
+            background: #e6f7ff;
+            color: #1890ff;
+        }
+        .tag-unit {
+            background: #f6ffed;
+            color: #52c41a;
+        }
+        .tag-spec {
+            background: #fff2f0;
+            color: #ff4d4f;
+        }
+        
+        .stock-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .stock-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        .stock-bar-fill.high { background: #52c41a; }
+        .stock-bar-fill.medium { background: #faad14; }
+        .stock-bar-fill.low { background: #f5222d; }
+        
+        .sku-matrix {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .sku-cell {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        .sku-cell-header {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        .sku-cell-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e8e8e8;
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #52c41a;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #52c41a;
+        }
+        .timeline-time {
+            font-size: 12px;
+            color: #888;
+        }
+        .timeline-content {
+            font-size: 14px;
+            color: #333;
+            margin-top: 4px;
+        }
+        
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 页面标题 -->
+        <div class="header">
+            <h1>📊 智掌柜 - 库存状况表</h1>
+            <div class="subtitle">商品名称: 测试商品_TEST40733 | 商品编码: TEST40733 | 查询时间: 2026-06-26 19:47:22</div>
+        </div>
+        
+        <!-- 汇总卡片 -->
+        <div class="summary-cards">
+            <div class="card">
+                <div class="card-label">当前库存</div>
+                <div class="card-value success">70</div>
+                <div class="card-change change-negative">↓ 减少30件（开单扣减）</div>
+            </div>
+            <div class="card">
+                <div class="card-label">初始库存</div>
+                <div class="card-value">100</div>
+                <div class="card-change">基础单位: 瓶</div>
+            </div>
+            <div class="card">
+                <div class="card-label">库存下限</div>
+                <div class="card-value warning">10</div>
+                <div class="card-change">安全库存阈值</div>
+            </div>
+            <div class="card">
+                <div class="card-label">库存状态</div>
+                <div class="card-value success">正常</div>
+                <div class="card-change change-positive">高于安全库存</div>
+            </div>
+        </div>
+        
+        <!-- 库存变化时间线 -->
+        <div class="section">
+            <div class="section-title">库存变化时间线</div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">2026-06-26 19:47:00</div>
+                    <div class="timeline-content">初始库存录入: <strong>100件</strong></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">2026-06-26 19:47:15</div>
+                    <div class="timeline-content">销售出库: <strong>3箱</strong> (等于30件)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">2026-06-26 19:47:22</div>
+                    <div class="timeline-content">当前库存: <strong>70件</strong></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 多单位库存明细 -->
+        <div class="section">
+            <div class="section-title">多单位库存明细</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>单位名称</th>
+                        <th>比例</th>
+                        <th>条码</th>
+                        <th>售价</th>
+                        <th>当前库存(该单位)</th>
+                        <th>等于基础单位</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="tag tag-unit">基础</span> 瓶</td>
+                        <td>1</td>
+                        <td>BARTEST40733</td>
+                        <td>¥100.00</td>
+                        <td>70</td>
+                        <td>70件</td>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span style="color:#52c41a;">正常</span>
+                                <div class="stock-bar" style="width:80px;">
+                                    <div class="stock-bar-fill high" style="width:70%;"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-unit">辅助</span> 箱</td>
+                        <td>10</td>
+                        <td>BOXTEST40733</td>
+                        <td>¥950.00</td>
+                        <td>-</td>
+                        <td>7箱</td>
+                        <td>
+                            <span style="color:#52c41a;">可售</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-unit">辅助</span> 打</td>
+                        <td>12</td>
+                        <td>DOZTEST40733</td>
+                        <td>¥1100.00</td>
+                        <td>-</td>
+                        <td>5.83打</td>
+                        <td>
+                            <span style="color:#faad14;">部分可售</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- SKU库存矩阵 -->
+        <div class="section">
+            <div class="section-title">SKU库存矩阵 <span class="tag tag-sku">3颜色×3尺码=9种SKU</span></div>
+            <div style="margin-bottom: 16px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:100px;">颜色 ▼ 尺码 ▶</th>
+                            <th>S码</th>
+                            <th>M码</th>
+                            <th>L码</th>
+                            <th>小计</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag tag-spec">红色</span></td>
+                            <td>10件</td>
+                            <td>10件</td>
+                            <td>10件</td>
+                            <td><strong>30件</strong></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-spec">蓝色</span></td>
+                            <td>10件</td>
+                            <td>10件</td>
+                            <td>10件</td>
+                            <td><strong>30件</strong></td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag tag-spec">绿色</span></td>
+                            <td>10件</td>
+                            <td>10件</td>
+                            <td>10件</td>
+                            <td><strong>30件</strong></td>
+                        </tr>
+                        <tr style="background:#f8f9fa;font-weight:bold;">
+                            <td>总计</td>
+                            <td>30件</td>
+                            <td>30件</td>
+                            <td>30件</td>
+                            <td style="color:#52c41a;">90件</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:12px;font-size:13px;color:#389e0d;">
+                <strong>说明:</strong> 当前总库存为100件，其中90件分配给各SKU，剩侙10件为未分配库存。
+                本次开单使用了管理库存（从总库存扣减30件），实际剩余70件。
+            </div>
+        </div>
+        
+        <!-- 相关订单 -->
+        <div class="section">
+            <div class="section-title">相关订单记录</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>订单号</th>
+                        <th>类型</th>
+                        <th>开单数量</th>
+                        <th>实际扣减</th>
+                        <th>金额</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SO50021</td>
+                        <td><span class="tag" style="background:#fff2f0;color:#ff4d4f;">销售出库</span></td>
+                        <td>3箱</td>
+                        <td>30件（3×10比例）</td>
+                        <td>¥2,850.00</td>
+                        <td><span style="color:#52c41a;">已完成</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 库存变化计算过程 -->
+        <div class="section">
+            <div class="section-title">库存变化计算过程</div>
+            <div style="background:#f8f9fa;border-radius:12px;padding:20px;">
+                <div style="font-family:'Courier New',monospace;font-size:14px;line-height:2;">
+                    <div style="color:#666;">初始库存:</div>
+                    <div style="padding-left:20px;">商品库存 = 100 件</div>
+                    
+                    <div style="color:#666;margin-top:12px;">开单信息:</div>
+                    <div style="padding-left:20px;">开单数量 = 3 箱</div>
+                    <div style="padding-left:20px;">单位比例 = 1箱 : 10件</div>
+                    
+                    <div style="color:#666;margin-top:12px;">扣减计算:</div>
+                    <div style="padding-left:20px;">扣减库存 = 3箱 × 10件/箱 = <strong style="color:#ff4d4f;">30件</strong></div>
+                    
+                    <div style="color:#666;margin-top:12px;">剩余库存:</div>
+                    <div style="padding-left:20px;">剩余库存 = 100件 - 30件 = <strong style="color:#52c41a;">70件</strong></div>
+                    
+                    <div style="color:#666;margin-top:12px;">订单金额:</div>
+                    <div style="padding-left:20px;">订单金额 = 3箱 × ¥950.00/箱 = <strong style="color:#1890ff;">¥2,850.00</strong></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            智掌柜 - AI进销存管理系统 | 生成时间: 2026-06-26 19:47:22 | 测试报告ID: TEST-20250626-001
+        </div>
+    </div>
+</body>
+</html>

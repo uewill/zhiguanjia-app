@@ -1,0 +1,44 @@
+{
+  "file_inventory": {
+    "status": "pass",
+    "timestamp": "2026-06-27T07:58:28.956024",
+    "filepath": "/workspace/zhiguanjia-app/lib/app/modules/inventory/views/inventory_view.dart",
+    "file_hash": "e3f901b6",
+    "duration": 0.00011134147644042969
+  },
+  "file_sale": {
+    "status": "pass",
+    "timestamp": "2026-06-27T07:58:28.956629",
+    "filepath": "/workspace/zhiguanjia-app/lib/app/modules/sale/views/sale_view.dart",
+    "file_hash": "ffc68873",
+    "duration": 4.4345855712890625e-05
+  },
+  "flutter_integration_file": {
+    "status": "pass",
+    "timestamp": "2026-06-27T07:58:28.956900",
+    "filepath": "/workspace/zhiguanjia-app/integration_test/full_workflow_ui_test.dart",
+    "file_hash": "325d8a3b",
+    "duration": 2.9802322387695312e-05
+  },
+  "web_health": {
+    "status": "fail",
+    "timestamp": "2026-06-27T07:59:25.570467",
+    "filepath": null,
+    "file_hash": "",
+    "duration": 0.008378028869628906
+  },
+  "api_health": {
+    "status": "fail",
+    "timestamp": "2026-06-27T07:59:25.569824",
+    "filepath": null,
+    "file_hash": "",
+    "duration": 0.008511543273925781
+  },
+  "api_create_product": {
+    "status": "fail",
+    "timestamp": "2026-06-27T07:59:25.570140",
+    "filepath": null,
+    "file_hash": "",
+    "duration": 0.007396697998046875
+  }
+}
