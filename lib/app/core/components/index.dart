@@ -11,3 +11,9 @@ export 'bill_bottom_bar.dart';
 
 // 通用表单字段组件 - 表头、表尾、资料页面共用
 export 'form_fields/index.dart';
+
+// 可复用选择器组件
+export 'reusable_selectors.dart';
+
+// 商品信息展示组件
+export 'product_info_card.dart';

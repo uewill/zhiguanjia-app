@@ -7,7 +7,7 @@ import '../../warehouse/controllers/warehouse_controller.dart';
 import '../../product/controllers/product_controller.dart';
 import '../controllers/purchase_order_controller_new.dart';
 
-/// 采购单创建页面 - 使用模板方法模式
+/// 采购单创建页面 - 使用模板方法模式 + 新表单字段组件
 class PurchaseOrderCreateViewNew extends BillCreatePage<PurchaseOrderControllerNew> {
   const PurchaseOrderCreateViewNew({Key? key}) : super(key: key);
 
@@ -17,7 +17,6 @@ class PurchaseOrderCreateViewNew extends BillCreatePage<PurchaseOrderControllerN
 }
 
 class _PurchaseOrderCreateViewNewState extends BillCreatePageState<PurchaseOrderControllerNew> {
-  // 保存控制器引用以便在底部弹窗中使用
   late final SupplierController _supplierController;
   late final WarehouseController _warehouseController;
   late final ProductController _productController;
@@ -25,7 +24,6 @@ class _PurchaseOrderCreateViewNewState extends BillCreatePageState<PurchaseOrder
   @override
   void initState() {
     super.initState();
-    // 初始化并注册控制器
     Get.put(PurchaseOrderControllerNew());
     _supplierController = Get.isRegistered<SupplierController>()
         ? Get.find<SupplierController>()
@@ -50,303 +48,53 @@ class _PurchaseOrderCreateViewNewState extends BillCreatePageState<PurchaseOrder
   @override
   void _showPartnerSelector() {
     _supplierController.loadSuppliers();
-    Get.bottomSheet(
-      Container(
-        height: Get.height * 0.7,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
-              ),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: TDText(
-                      '选择供应商',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Get.back(),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Obx(() {
-                if (_supplierController.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (_supplierController.suppliers.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.business_outlined, size: 48, color: Colors.grey[300]),
-                        const SizedBox(height: 8),
-                        TDText('暂无供应商', style: TextStyle(color: Colors.grey[400])),
-                      ],
-                    ),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: _supplierController.suppliers.length,
-                  itemBuilder: (context, index) {
-                    final supplier = _supplierController.suppliers[index];
-                    return ListTile(
-                      title: Text(supplier.name),
-                      subtitle: supplier.contact != null
-                          ? Text('联系人: ${supplier.contact}')
-                          : null,
-                      trailing: supplier.phone != null
-                          ? Text(supplier.phone!)
-                          : null,
-                      onTap: () {
-                        controller.selectPartner({
-                          'id': supplier.id,
-                          'name': supplier.name,
-                          'contact': supplier.contact,
-                          'phone': supplier.phone,
-                        });
-                        Get.back();
-                      },
-                    );
-                  },
-                );
-              }),
-            ),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: Colors.grey[200]!)),
-              ),
-              child: TDButton(
-                text: '新增供应商',
-                theme: TDButtonTheme.primary,
-                size: TDButtonSize.large,
-                isBlock: true,
-                icon: TDIcons.add,
-                onTap: () {
-                  Get.back();
-                  Get.toNamed('/supplier/form');
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+    SupplierSelector.show(
+      suppliers: _supplierController.suppliers,
+      isLoading: _supplierController.isLoading.value,
+      onRefresh: () => _supplierController.loadSuppliers(),
+      onCreateNew: () => Get.toNamed('/supplier/form'),
+      onSelected: (supplier) {
+        controller.selectPartner({
+          'id': supplier.id,
+          'name': supplier.name,
+          'contact': supplier.contact,
+          'phone': supplier.phone,
+        });
+      },
     );
   }
 
   @override
   void _showWarehouseSelector({bool isFrom = true}) {
     _warehouseController.loadWarehouses();
-    Get.bottomSheet(
-      Container(
-        height: Get.height * 0.6,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: const TDText(
-                '选择入库仓库',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Expanded(
-              child: Obx(() {
-                if (_warehouseController.warehouses.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.warehouse_outlined, size: 48, color: Colors.grey[300]),
-                        const SizedBox(height: 8),
-                        TDText('暂无仓库', style: TextStyle(color: Colors.grey[400])),
-                      ],
-                    ),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: _warehouseController.warehouses.length,
-                  itemBuilder: (context, index) {
-                    final warehouse = _warehouseController.warehouses[index];
-                    return ListTile(
-                      title: Row(
-                        children: [
-                          Text(warehouse.name),
-                          if (warehouse.isDefault) ...[
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF2FC27D).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: const Text(
-                                '默认',
-                                style: TextStyle(fontSize: 10, color: Color(0xFF2FC27D)),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                      subtitle: warehouse.address != null
-                          ? Text(warehouse.address!)
-                          : null,
-                      onTap: () {
-                        controller.selectWarehouse({
-                          'id': warehouse.id,
-                          'name': warehouse.name,
-                          'address': warehouse.address,
-                          'isDefault': warehouse.isDefault,
-                        });
-                        Get.back();
-                      },
-                    );
-                  },
-                );
-              }),
-            ),
-          ],
-        ),
-      ),
+    WarehouseSelector.show(
+      title: '选择入库仓库',
+      warehouses: _warehouseController.warehouses,
+      isLoading: _warehouseController.isLoading.value,
+      onRefresh: () => _warehouseController.loadWarehouses(),
+      onSelected: (warehouse) {
+        controller.selectWarehouse({
+          'id': warehouse.id,
+          'name': warehouse.name,
+          'address': warehouse.address,
+          'isDefault': warehouse.isDefault,
+        });
+      },
     );
   }
 
   @override
   void _showProductSelector() {
     _productController.loadProducts();
-    Get.bottomSheet(
-      Container(
-        height: Get.height * 0.8,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
-              ),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: TDText(
-                      '选择商品',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Get.back(),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: TDInput(
-                leftLabel: '',
-                hintText: '搜索商品名称、编码',
-                prefixIcon: const Icon(Icons.search),
-                onChanged: (v) => _productController.searchProducts(v),
-              ),
-            ),
-            Expanded(
-              child: Obx(() {
-                final products = _productController.filteredProducts.isNotEmpty
-                    ? _productController.filteredProducts
-                    : _productController.products;
-                if (_productController.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (products.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.inventory_2_outlined, size: 48, color: Colors.grey[300]),
-                        const SizedBox(height: 8),
-                        TDText('暂无商品', style: TextStyle(color: Colors.grey[400])),
-                      ],
-                    ),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return ListTile(
-                      leading: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(Icons.image, color: Colors.grey),
-                      ),
-                      title: Text(product.name),
-                      subtitle: Text('编码: ${product.code} | 库存: ${product.stock}'),
-                      trailing: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '¥${product.purchasePrice.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              color: Color(0xFFF53F3F),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            product.unit,
-                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        _onProductSelected(product);
-                      },
-                    );
-                  },
-                );
-              }),
-            ),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: Colors.grey[200]!)),
-              ),
-              child: TDButton(
-                text: '新增商品',
-                theme: TDButtonTheme.light,
-                size: TDButtonSize.large,
-                isBlock: true,
-                icon: TDIcons.add,
-                onTap: () {
-                  Get.back();
-                  Get.toNamed('/product/form');
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+    ProductSelector.show(
+      products: _productController.filteredProducts.isNotEmpty
+          ? _productController.filteredProducts
+          : _productController.products,
+      isLoading: _productController.isLoading.value,
+      priceGetter: (p) => '¥${p.purchasePrice?.toStringAsFixed(2) ?? '0.00'}',
+      onRefresh: () => _productController.loadProducts(),
+      onCreateNew: () => Get.toNamed('/product/form'),
+      onSelected: (product) => _onProductSelected(product),
     );
   }
 
@@ -357,7 +105,7 @@ class _PurchaseOrderCreateViewNewState extends BillCreatePageState<PurchaseOrder
       productCode: product.code,
       unit: product.unit,
       quantity: 1,
-      price: product.purchasePrice,
+      price: product.purchasePrice ?? 0,
     );
     controller.addItem(item);
     Get.back();
