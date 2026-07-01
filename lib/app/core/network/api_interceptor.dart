@@ -1,4 +1,5 @@
 import 'api_client.dart';
+import 'api_exception.dart';
 
 /// API 拦截器接口
 abstract class ApiInterceptor {

@@ -65,7 +65,7 @@ class WarehouseListView extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2FC27D).withOpacity(0.1),
+                    color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(Icons.warehouse, color: Color(0xFF2FC27D)),
@@ -77,7 +77,7 @@ class WarehouseListView extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2FC27D).withOpacity(0.1),
+                          color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const TDText('默认', style: TextStyle(fontSize: 12, color: Color(0xFF2FC27D))),

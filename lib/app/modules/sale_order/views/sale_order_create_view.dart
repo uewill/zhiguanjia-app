@@ -114,7 +114,7 @@ class _SaleOrderCreateViewState extends State<SaleOrderCreateView> {
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.purple.withOpacity(0.1),
+                  color: Colors.purple.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -175,7 +175,7 @@ class _SaleOrderCreateViewState extends State<SaleOrderCreateView> {
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2FC27D).withOpacity(0.1),
+                  color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(

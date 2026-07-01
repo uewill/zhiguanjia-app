@@ -22,4 +22,14 @@ class Customer {
       balance: (json['balance'] as num?)?.toDouble() ?? 0,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'phone': phone,
+      'address': address,
+      'balance': balance,
+    };
+  }
 }

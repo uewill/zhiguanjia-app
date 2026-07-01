@@ -30,7 +30,12 @@ import '../modules/inventory/bindings/inventory_binding.dart';
 import '../modules/finance/views/finance_view.dart';
 import '../modules/finance/bindings/finance_binding.dart';
 import '../modules/staff/views/staff_list_view.dart';
+import '../modules/staff/views/staff_form_view.dart';
+import '../modules/staff/views/staff_detail_view.dart';
 import '../modules/staff/bindings/staff_binding.dart';
+import '../modules/workflow/views/status_history_view.dart';
+import '../modules/workflow/views/approval_view.dart';
+import '../modules/workflow/bindings/workflow_binding.dart';
 import '../modules/permission/views/role_list_view.dart';
 import '../modules/permission/views/permission_assign_view.dart';
 import '../modules/permission/bindings/permission_binding.dart';
@@ -48,8 +53,7 @@ import '../modules/print/controllers/print_template_controller.dart';
 import '../modules/barcode/views/barcode_template_list_view.dart';
 import '../modules/barcode/views/barcode_print_view.dart';
 import '../modules/barcode/views/barcode_template_editor_view.dart';
-import '../modules/barcode/views/barcode_template_editor_view.dart';
-import '../modules/barcode/views/barcode_template_editor_view.dart';
+import '../modules/barcode/controllers/barcode_template_controller.dart';
 
 // 新框架页面 - 采购单
 import '../modules/purchase_order/views/purchase_order_create_view_new.dart';
@@ -178,6 +182,26 @@ class AppPages {
       name: _Paths.STAFF_LIST,
       page: () => const StaffListView(),
       binding: StaffBinding(),
+    ),
+    GetPage(
+      name: _Paths.STAFF_FORM,
+      page: () => const StaffFormView(),
+      binding: StaffBinding(),
+    ),
+    GetPage(
+      name: _Paths.STAFF_DETAIL,
+      page: () => const StaffDetailView(),
+      binding: StaffBinding(),
+    ),
+    GetPage(
+      name: _Paths.WORKFLOW_HISTORY,
+      page: () => const StatusHistoryView(),
+      binding: WorkflowBinding(),
+    ),
+    GetPage(
+      name: _Paths.WORKFLOW_APPROVAL,
+      page: () => const ApprovalView(),
+      binding: WorkflowBinding(),
     ),
     GetPage(
       name: _Paths.PERMISSION_LIST,

@@ -192,7 +192,7 @@ class ProductListView extends GetView<ProductController> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF667eea).withOpacity(0.1),
+                        color: const Color(0xFF667eea).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: const Row(

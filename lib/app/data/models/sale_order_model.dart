@@ -59,6 +59,27 @@ class SaleOrder {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'orderNo': orderNo,
+      'customerId': customerId,
+      'customerName': customerName,
+      'warehouseId': warehouseId,
+      'warehouseName': warehouseName,
+      'status': status,
+      'itemCount': itemCount,
+      'totalAmount': totalAmount,
+      'paidAmount': paidAmount,
+      'remark': remark,
+      'orderDate': orderDate.toIso8601String(),
+      'deliveryDate': deliveryDate?.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'completedAt': completedAt?.toIso8601String(),
+      'items': items?.map((e) => e.toJson()).toList(),
+    };
+  }
+
   String get statusText {
     switch (status) {
       case 'pending':
@@ -121,6 +142,22 @@ class SaleOrderItem {
       deliveredQuantity: json['deliveredQuantity'],
       remark: json['remark'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'productId': productId,
+      'productName': productName,
+      'productCode': productCode,
+      'barcode': barcode,
+      'unit': unit,
+      'quantity': quantity,
+      'price': price,
+      'totalPrice': totalPrice ?? (price * quantity),
+      'deliveredQuantity': deliveredQuantity,
+      'remark': remark,
+    };
   }
 
   int get pendingQuantity => quantity - (deliveredQuantity ?? 0);

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'bill_field_base.dart';
 
 /// 数字输入字段
@@ -44,10 +43,8 @@ class BillNumberField extends BillFieldBase {
           Row(
             children: [
               Expanded(
-                child: TDInput(
-                  leftLabel: '',
-                  hintText: hintText ?? '请输入$label',
-                  text: textValue,
+                child: TextField(
+                  controller: TextEditingController(text: textValue),
                   readOnly: readOnly,
                   keyboardType: TextInputType.numberWithOptions(
                     decimal: decimalPlaces > 0,
@@ -76,12 +73,25 @@ class BillNumberField extends BillFieldBase {
                       onChanged?.call(numValue);
                     }
                   },
-                  backgroundColor: readOnly ? Colors.grey.shade50 : Colors.white,
+                  decoration: InputDecoration(
+                    hintText: hintText ?? '请输入$label',
+                    filled: true,
+                    fillColor: readOnly ? Colors.grey.shade50 : Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                  ),
                 ),
               ),
               if (unit != null) ...[
                 const SizedBox(width: 8),
-                TDText(
+                Text(
                   unit!,
                   style: TextStyle(
                     fontSize: 14,

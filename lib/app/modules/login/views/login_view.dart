@@ -25,7 +25,7 @@ class LoginView extends GetView<LoginController> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2FC27D).withOpacity(0.1),
+                    color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Center(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'bill_type.dart';
 import 'bill_controller.dart';
 import '../components/partner_selector.dart';
 import '../components/warehouse_selector.dart';

@@ -50,7 +50,6 @@ class _CachedListItemState extends State<CachedListItem> {
     return widget.child;
   }
 
-  @override
   bool shouldRebuild(covariant CachedListItem oldWidget) {
     return widget.shouldUpdate || oldWidget.id != widget.id;
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'bill_field_base.dart';
 
@@ -40,24 +39,25 @@ class BillDateField extends BillFieldBase {
     return result;
   }
 
-  void _showDatePicker(BuildContext context) {
+  Future<void> _showDatePicker(BuildContext context) async {
     if (readOnly) return;
 
-    TDPicker.showDatePicker(
-      context,
-      title: '选择$label',
-      onConfirm: (selected) {
-        final date = DateTime(
-          selected['year'] ?? DateTime.now().year,
-          selected['month'] ?? DateTime.now().month,
-          selected['day'] ?? DateTime.now().day,
-        );
-        onChanged?.call(date);
-        Get.back();
-      },
-      onCancel: () => Get.back(),
-      useWeekDay: false,
+    final now = DateTime.now();
+    final initial = value ?? now;
+    
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: minDate ?? DateTime(2000),
+      lastDate: maxDate ?? DateTime(2100),
+      helpText: '选择$label',
+      cancelText: '取消',
+      confirmText: '确定',
     );
+    
+    if (picked != null) {
+      onChanged?.call(picked);
+    }
   }
 
   @override

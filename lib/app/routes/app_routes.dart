@@ -19,6 +19,10 @@ abstract class Routes {
   static const INVENTORY = _Paths.INVENTORY;
   static const FINANCE = _Paths.FINANCE;
   static const STAFF_LIST = _Paths.STAFF_LIST;
+  static const STAFF_FORM = _Paths.STAFF_FORM;
+  static const STAFF_DETAIL = _Paths.STAFF_DETAIL;
+  static const WORKFLOW_HISTORY = _Paths.WORKFLOW_HISTORY;
+  static const WORKFLOW_APPROVAL = _Paths.WORKFLOW_APPROVAL;
   static const PERMISSION_LIST = _Paths.PERMISSION_LIST;
   static const PERMISSION_ASSIGN = _Paths.PERMISSION_ASSIGN;
   static const WARNING_LIST = _Paths.WARNING_LIST;
@@ -65,6 +69,10 @@ abstract class _Paths {
   static const INVENTORY = '/inventory';
   static const FINANCE = '/finance';
   static const STAFF_LIST = '/staff/list';
+  static const STAFF_FORM = '/staff/form';
+  static const STAFF_DETAIL = '/staff/detail';
+  static const WORKFLOW_HISTORY = '/workflow/history';
+  static const WORKFLOW_APPROVAL = '/workflow/approval';
   static const PERMISSION_LIST = '/permission/list';
   static const PERMISSION_ASSIGN = '/permission/assign';
   static const WARNING_LIST = '/warning/list';

@@ -95,7 +95,7 @@ class _SmartSaleOrderViewState extends State<SmartSaleOrderView> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -149,7 +149,7 @@ class _SmartSaleOrderViewState extends State<SmartSaleOrderView> {
           width: 120,
           height: 120,
           decoration: BoxDecoration(
-            color: isListening ? Colors.red.withOpacity(0.1) : const Color(0xFF2FC27D).withOpacity(0.1),
+            color: isListening ? Colors.red.withValues(alpha: 0.1) : const Color(0xFF2FC27D).withValues(alpha: 0.1),
             shape: BoxShape.circle,
             border: Border.all(
               color: isListening ? Colors.red : const Color(0xFF2FC27D),

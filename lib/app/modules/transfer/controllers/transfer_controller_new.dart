@@ -53,10 +53,10 @@ class TransferControllerNew extends BillCreateController {
   BillBase buildBill() {
     return TransferOrderModel(
       billDate: billDate.value,
-      fromWarehouseId: selectedWarehouse.value?['id'] ?? selectedWarehouse.value?.id,
-      fromWarehouseName: selectedWarehouse.value?['name'] ?? selectedWarehouse.value?.name,
-      toWarehouseId: selectedToWarehouse.value?['id'] ?? selectedToWarehouse.value?.id,
-      toWarehouseName: selectedToWarehouse.value?['name'] ?? selectedToWarehouse.value?.name,
+      fromWarehouseId: selectedWarehouse.value?['id'],
+      fromWarehouseName: selectedWarehouse.value?['name'],
+      toWarehouseId: selectedToWarehouse.value?['id'],
+      toWarehouseName: selectedToWarehouse.value?['name'],
       remark: remark.value,
       items: items.map((item) => TransferOrderItem(
         productId: item.productId,
@@ -84,30 +84,44 @@ class TransferControllerNew extends BillCreateController {
 /// 调拨单数据模型
 class TransferOrderModel implements BillBase {
   @override
-  final String id = DateTime.now().millisecondsSinceEpoch.toString();
+  final int? id;
+  @override
+  final String? billNo;
   @override
   DateTime billDate;
   @override
-  int? partnerId; // 不需要
-  @override
-  String? partnerName; // 不需要
-  @override
-  int? warehouseId; // 调出仓库
-  @override
-  String? warehouseName;
+  final String status = 'pending';
   @override
   String? remark;
   @override
-  double totalAmount = 0; // 调拨单无金额
+  final int? partnerId = null;
+  @override
+  final String? partnerName = null;
+  @override
+  int? warehouseId;
+  @override
+  String? warehouseName;
+  @override
+  int? toWarehouseId;
+  @override
+  String? toWarehouseName;
+  @override
+  final double? totalAmount = 0;
+  @override
+  final double? discountAmount = 0;
+  @override
+  final double? payableAmount = null;
+  @override
+  final double? paidAmount = null;
   @override
   List<BillItemBase> items;
 
   int? fromWarehouseId;
   String? fromWarehouseName;
-  int? toWarehouseId;
-  String? toWarehouseName;
 
   TransferOrderModel({
+    this.id,
+    this.billNo,
     required this.billDate,
     this.fromWarehouseId,
     this.fromWarehouseName,
@@ -120,6 +134,7 @@ class TransferOrderModel implements BillBase {
     warehouseName = fromWarehouseName;
   }
 
+  @override
   Map<String, dynamic> toJson() => {
     'fromWarehouseId': fromWarehouseId,
     'fromWarehouseName': fromWarehouseName,
@@ -127,19 +142,16 @@ class TransferOrderModel implements BillBase {
     'toWarehouseName': toWarehouseName,
     'billDate': billDate.toIso8601String(),
     'remark': remark,
-    'items': items.map((e) => {
-      'productId': e.productId,
-      'productName': e.productName,
-      'quantity': e.quantity,
-      'unit': e.unitDisplay,
-    }).toList(),
+    'items': items.map((e) => e.toJson()).toList(),
   };
 }
 
 /// 调拨单明细项
 class TransferOrderItem implements BillItemBase {
   @override
-  final int productId;
+  final int? id;
+  @override
+  final int? productId;
   @override
   final String productName;
   @override
@@ -147,32 +159,27 @@ class TransferOrderItem implements BillItemBase {
   @override
   final String? unit;
   @override
-  final RxInt quantity = 1.obs;
+  final int quantity;
   @override
-  final double? price = null; // 调拨单无单价
+  final double? price = null;
+  @override
+  double? get amount => null;
 
   TransferOrderItem({
+    this.id,
     required this.productId,
     required this.productName,
     this.productCode,
     this.unit,
-    required int quantity,
-  }) {
-    this.quantity.value = quantity;
-  }
+    required this.quantity,
+  });
 
   @override
-  double get subtotal => 0; // 调拨单无金额
-
-  @override
-  String get unitDisplay => unit ?? '件';
-
-  @override
-  String get displayName => productName;
-
-  @override
-  set selectedUnit(String? value) {}
-
-  @override
-  String? get selectedUnit => unit;
+  Map<String, dynamic> toJson() => {
+    'productId': productId,
+    'productName': productName,
+    'productCode': productCode,
+    'unit': unit,
+    'quantity': quantity,
+  };
 }

@@ -50,6 +50,24 @@ class TransferOrder {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'orderNo': orderNo,
+      'fromWarehouseId': fromWarehouseId,
+      'fromWarehouseName': fromWarehouseName,
+      'toWarehouseId': toWarehouseId,
+      'toWarehouseName': toWarehouseName,
+      'status': status,
+      'itemCount': itemCount,
+      'totalAmount': totalAmount,
+      'remark': remark,
+      'createdAt': createdAt.toIso8601String(),
+      'completedAt': completedAt?.toIso8601String(),
+      'items': items?.map((e) => e.toJson()).toList(),
+    };
+  }
+
   String get statusText {
     switch (status) {
       case 'pending':
@@ -103,5 +121,20 @@ class TransferItem {
       totalPrice: json['totalPrice'] != null ? (json['totalPrice'] as num).toDouble() : null,
       remark: json['remark'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'productId': productId,
+      'productName': productName,
+      'productCode': productCode,
+      'barcode': barcode,
+      'unit': unit,
+      'quantity': quantity,
+      'purchasePrice': purchasePrice,
+      'totalPrice': totalPrice ?? (purchasePrice != null ? purchasePrice! * quantity : null),
+      'remark': remark,
+    };
   }
 }

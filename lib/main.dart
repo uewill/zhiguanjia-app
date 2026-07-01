@@ -31,8 +31,8 @@ void main() async {
 
   // 初始化服务
   await Get.putAsync(() => StorageService().init());
-  await Get.putAsync(() => CacheService().init()); // 缓存服务
-  Get.put(ApiService());
+  await Get.putAsync(() => CacheService().init());
+  await Get.putAsync(() => ApiService().init());  // 使用init()
   Get.put(PrintService());
   Get.put(BarcodePrintService());
   Get.put(QiniuService());

@@ -19,6 +19,88 @@ class WarehouseSelector extends StatelessWidget {
     required this.onSelect,
   }) : super(key: key);
 
+  /// 显示仓库选择器
+  static void show({
+    required String title,
+    required List<dynamic> warehouses,
+    required bool isLoading,
+    required VoidCallback onRefresh,
+    required Function(dynamic) onSelected,
+  }) {
+    Get.bottomSheet(
+      Container(
+        height: Get.height * 0.6,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              child: TDText(
+                title,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Expanded(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : warehouses.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.warehouse_outlined, size: 48, color: Colors.grey[300]),
+                              const SizedBox(height: 8),
+                              TDText('暂无仓库', style: TextStyle(color: Colors.grey[400])),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: warehouses.length,
+                          itemBuilder: (context, index) {
+                            final warehouse = warehouses[index];
+                            final isDefault = warehouse.isDefault == true;
+                            
+                            return ListTile(
+                              title: Row(
+                                children: [
+                                  Text(warehouse.name ?? ''),
+                                  if (isDefault) ...[
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: const Text(
+                                        '默认',
+                                        style: TextStyle(fontSize: 10, color: Color(0xFF2FC27D)),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              subtitle: warehouse.address != null
+                                  ? Text(warehouse.address ?? '')
+                                  : null,
+                              onTap: () {
+                                Get.back();
+                                onSelected(warehouse);
+                              },
+                            );
+                          },
+                        ),
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +137,7 @@ class WarehouseSelector extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -65,12 +147,12 @@ class WarehouseSelector extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TDText(
-                            warehouse['name'] ?? warehouse.name ?? '',
+                            warehouse['name']?.toString() ?? '',
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          if (warehouse['address'] != null || warehouse.address != null)
+                          if (warehouse['address'] != null)
                             TDText(
-                              warehouse['address'] ?? warehouse.address ?? '',
+                              warehouse['address']?.toString() ?? '',
                               style: const TextStyle(fontSize: 12, color: Colors.grey),
                             ),
                         ],
@@ -142,13 +224,13 @@ class WarehouseSelectorBottomSheet extends StatelessWidget {
                   return ListTile(
                     title: Row(
                       children: [
-                        Text(warehouse['name'] ?? warehouse.name ?? ''),
+                        Text(warehouse['name']?.toString() ?? ''),
                         if (isDefault) ...[
                           const SizedBox(width: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF2FC27D).withOpacity(0.1),
+                              color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: const Text(
@@ -159,8 +241,8 @@ class WarehouseSelectorBottomSheet extends StatelessWidget {
                         ],
                       ],
                     ),
-                    subtitle: warehouse['address'] != null || warehouse.address != null
-                        ? Text(warehouse['address'] ?? warehouse.address ?? '')
+                    subtitle: warehouse['address'] != null
+                        ? Text(warehouse['address']?.toString() ?? '')
                         : null,
                     onTap: () => onSelect(warehouse),
                   );

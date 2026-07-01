@@ -166,7 +166,7 @@ class SaleView extends GetView<SaleController> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: (statusInfo['color'] as Color).withOpacity(0.1),
+        color: (statusInfo['color'] as Color).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),
       ),
       child: TDText(

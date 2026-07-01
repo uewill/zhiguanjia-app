@@ -60,6 +60,28 @@ class Product {
       attrs: json['attrs'] != null ? (json['attrs'] as List).map((e) => ProductAttr.fromJson(e)).toList() : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'code': code,
+      'barcode': barcode,
+      'category': category,
+      'unit': unit,
+      'units': units?.map((e) => e.toJson()).toList(),
+      'purchasePrice': purchasePrice,
+      'salePrice': salePrice,
+      'stock': stock,
+      'minStock': minStock,
+      'imageUrl': imageUrl,
+      'images': images,
+      'hasSku': hasSku,
+      'skuSpecs': skuSpecs?.map((e) => e.toJson()).toList(),
+      'skus': skus?.map((e) => e.toJson()).toList(),
+      'attrs': attrs?.map((e) => e.toJson()).toList(),
+    };
+  }
 }
 
 class SkuSpec {

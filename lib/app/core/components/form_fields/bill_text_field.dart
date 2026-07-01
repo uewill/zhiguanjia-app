@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:flutter/services.dart';
 import 'bill_field_base.dart';
 
 /// 文本输入字段
@@ -39,10 +39,8 @@ class BillTextField extends BillFieldBase {
         children: [
           buildLabel(),
           const SizedBox(height: 8),
-          TDInput(
-            leftLabel: '',
-            hintText: hintText ?? '请输入$label',
-            text: value ?? '',
+          TextField(
+            controller: TextEditingController(text: value ?? ''),
             readOnly: readOnly,
             maxLines: maxLines,
             maxLength: maxLength,
@@ -50,8 +48,21 @@ class BillTextField extends BillFieldBase {
             textInputAction: textInputAction,
             inputFormatters: inputFormatters,
             onChanged: onChanged,
-            backgroundColor: readOnly ? Colors.grey.shade50 : Colors.white,
-            rightWidget: suffix,
+            decoration: InputDecoration(
+              hintText: hintText ?? '请输入$label',
+              filled: true,
+              fillColor: readOnly ? Colors.grey.shade50 : Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.grey.shade400),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.grey.shade400),
+              ),
+              suffixIcon: suffix,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            ),
           ),
         ],
       ),

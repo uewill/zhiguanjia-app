@@ -158,17 +158,27 @@ class _BottomSelectorContentState<T> extends State<_BottomSelectorContent<T>> {
         if (widget.showSearch && widget.searchKey != null)
           Padding(
             padding: const EdgeInsets.all(12),
-            child: TDInput(
-              leftLabel: '',
-              hintText: '搜索...',
-              prefixIcon: const Icon(Icons.search),
+            child: TextField(
               controller: _searchController,
               onChanged: _onSearchChanged,
-              clearBtn: _searchController.text.isNotEmpty,
-              onClearTap: () {
-                _searchController.clear();
-                _onSearchChanged('');
-              },
+              decoration: InputDecoration(
+                hintText: '搜索...',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          _onSearchChanged('');
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey.shade400),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+              ),
             ),
           ),
         // 列表
@@ -193,7 +203,7 @@ class _BottomSelectorContentState<T> extends State<_BottomSelectorContent<T>> {
                         final isSelected = item == widget.selectedValue;
                         return ListTile(
                           selected: isSelected,
-                          selectedTileColor: const Color(0xFF2FC27D).withOpacity(0.1),
+                          selectedTileColor: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                           onTap: () {
                             widget.onItemSelected?.call(item);
                             Get.back();
@@ -307,7 +317,7 @@ class SupplierSelector {
 }
 
 /// 仓库选择器
-class WarehouseSelector {
+class WarehousePicker {
   static void show({
     required List<dynamic> warehouses,
     required Function(dynamic warehouse) onSelected,
@@ -337,7 +347,7 @@ class WarehouseSelector {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF2FC27D).withOpacity(0.1),
+                            color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: const Text(

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 import 'api_exception.dart';
 import 'api_interceptor.dart';
 
@@ -13,7 +12,7 @@ class ApiClient {
   ApiClient._internal();
 
   // API 基础地址
-  static const String baseUrl = 'http://localhost:8082/api';
+  static const String baseUrl = 'http://42.193.169.78:8082/api';
   
   // 超时设置
   static const Duration timeout = Duration(seconds: 30);
@@ -145,9 +144,9 @@ class ApiClient {
       // 处理响应
       return _handleResponse<T>(apiResponse);
 
-    } on SocketException catch (e) {
+    } on SocketException catch (_) {
       throw ApiException('网络连接失败，请检查网络设置', code: 'NETWORK_ERROR');
-    } on FormatException catch (e) {
+    } on FormatException catch (_) {
       throw ApiException('数据格式错误', code: 'FORMAT_ERROR');
     } on ApiException {
       rethrow;

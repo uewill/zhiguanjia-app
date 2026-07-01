@@ -7,7 +7,7 @@ class SaleOrderControllerNew extends BillCreateController {
   final ApiService _apiService = Get.find<ApiService>();
   
   @override
-  BillType get billType => BillType.sale;
+  BillType get billType => BillType.sales;
 
   @override
   Future<List<Map<String, dynamic>>> loadPartners() async {
@@ -63,10 +63,10 @@ class SaleOrderControllerNew extends BillCreateController {
   BillBase buildBill() {
     return SaleOrderModel(
       billDate: billDate.value,
-      customerId: selectedPartner.value?['id'] ?? selectedPartner.value?.id,
-      customerName: selectedPartner.value?['name'] ?? selectedPartner.value?.name,
-      warehouseId: selectedWarehouse.value?['id'] ?? selectedWarehouse.value?.id,
-      warehouseName: selectedWarehouse.value?['name'] ?? selectedWarehouse.value?.name,
+      customerId: selectedPartner.value?['id'],
+      customerName: selectedPartner.value?['name'],
+      warehouseId: selectedWarehouse.value?['id'],
+      warehouseName: selectedWarehouse.value?['name'],
       remark: remark.value,
       totalAmount: totalAmount,
       items: items.map((item) => SaleOrderItem(
@@ -76,7 +76,6 @@ class SaleOrderControllerNew extends BillCreateController {
         unit: item.unitDisplay,
         quantity: item.quantity.value,
         price: item.price ?? 0,
-        amount: item.subtotal,
       )).toList(),
     );
   }
@@ -97,9 +96,15 @@ class SaleOrderControllerNew extends BillCreateController {
 /// 销售单数据模型
 class SaleOrderModel implements BillBase {
   @override
-  final String id = DateTime.now().millisecondsSinceEpoch.toString();
+  final int? id;
+  @override
+  final String? billNo;
   @override
   DateTime billDate;
+  @override
+  final String status = 'pending';
+  @override
+  String? remark;
   @override
   int? partnerId;
   @override
@@ -109,9 +114,17 @@ class SaleOrderModel implements BillBase {
   @override
   String? warehouseName;
   @override
-  String? remark;
+  final int? toWarehouseId = null;
   @override
-  double totalAmount;
+  final String? toWarehouseName = null;
+  @override
+  double? totalAmount;
+  @override
+  final double? discountAmount = 0;
+  @override
+  final double? payableAmount = null;
+  @override
+  final double? paidAmount = null;
   @override
   List<BillItemBase> items;
 
@@ -119,19 +132,22 @@ class SaleOrderModel implements BillBase {
   String? customerName;
 
   SaleOrderModel({
+    this.id,
+    this.billNo,
     required this.billDate,
     this.customerId,
     this.customerName,
     this.warehouseId,
     this.warehouseName,
     this.remark,
-    required this.totalAmount,
+    this.totalAmount,
     required this.items,
   }) {
     partnerId = customerId;
     partnerName = customerName;
   }
 
+  @override
   Map<String, dynamic> toJson() => {
     'customerId': customerId,
     'customerName': customerName,
@@ -140,21 +156,16 @@ class SaleOrderModel implements BillBase {
     'billDate': billDate.toIso8601String(),
     'remark': remark,
     'totalAmount': totalAmount,
-    'items': items.map((e) => {
-      'productId': e.productId,
-      'productName': e.productName,
-      'quantity': e.quantity,
-      'price': e.price,
-      'amount': e.subtotal,
-      'unit': e.unitDisplay,
-    }).toList(),
+    'items': items.map((e) => e.toJson()).toList(),
   };
 }
 
 /// 销售单明细项
 class SaleOrderItem implements BillItemBase {
   @override
-  final int productId;
+  final int? id;
+  @override
+  final int? productId;
   @override
   final String productName;
   @override
@@ -162,33 +173,30 @@ class SaleOrderItem implements BillItemBase {
   @override
   final String? unit;
   @override
-  final RxInt quantity = 1.obs;
+  final int quantity;
   @override
   final double? price;
+  @override
+  double? get amount => (price ?? 0) * quantity;
 
   SaleOrderItem({
+    this.id,
     required this.productId,
     required this.productName,
     this.productCode,
     this.unit,
-    required int quantity,
+    required this.quantity,
     this.price,
-  }) {
-    this.quantity.value = quantity;
-  }
+  });
 
   @override
-  double get subtotal => (price ?? 0) * quantity.value;
-
-  @override
-  String get unitDisplay => unit ?? '件';
-
-  @override
-  String get displayName => productName;
-
-  @override
-  set selectedUnit(String? value) {}
-
-  @override
-  String? get selectedUnit => unit;
+  Map<String, dynamic> toJson() => {
+    'productId': productId,
+    'productName': productName,
+    'productCode': productCode,
+    'unit': unit,
+    'quantity': quantity,
+    'price': price,
+    'amount': amount,
+  };
 }

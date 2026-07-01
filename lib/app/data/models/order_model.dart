@@ -43,6 +43,22 @@ class Order {
       createTime: DateTime.parse(json['createTime']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'orderNo': orderNo,
+      'type': type,
+      'customerId': customerId,
+      'customerName': customerName,
+      'items': items.map((e) => e.toJson()).toList(),
+      'totalAmount': totalAmount,
+      'discountAmount': discountAmount,
+      'status': status,
+      'remark': remark,
+      'createTime': createTime.toIso8601String(),
+    };
+  }
 }
 
 class OrderItem {
@@ -88,6 +104,22 @@ class OrderItem {
       skuSpecs: json['skuSpecs'] != null ? Map<String, String>.from(json['skuSpecs']) : null,
       actualQuantity: json['actualQuantity'],
     );
+  }
+  
+  Map<String, dynamic> toJson() {
+    return {
+      'productId': productId,
+      'productName': productName,
+      'barcode': barcode,
+      'quantity': quantity,
+      'unit': unit,
+      'unitPrice': unitPrice,
+      'amount': amount,
+      'unitRatio': unitRatio,
+      'skuId': skuId,
+      'skuSpecs': skuSpecs,
+      'actualQuantity': actualQuantity,
+    };
   }
   
   // 获取显示名称（包含规格信息）

@@ -201,7 +201,7 @@ class FinanceView extends GetView<FinanceController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF53F3F).withOpacity(0.1),
+                      color: const Color(0xFFF53F3F).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: const TDText('逾期',
@@ -237,7 +237,7 @@ class FinanceView extends GetView<FinanceController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF53F3F).withOpacity(0.1),
+                      color: const Color(0xFFF53F3F).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: const TDText('逾期',
@@ -497,7 +497,7 @@ class FinanceView extends GetView<FinanceController> {
                         dotData: const FlDotData(show: false),
                         belowBarData: BarAreaData(
                           show: true,
-                          color: const Color(0xFF2FC27D).withOpacity(0.1),
+                          color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                         ),
                       ),
                     ],

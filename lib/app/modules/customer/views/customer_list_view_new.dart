@@ -49,7 +49,7 @@ class _CustomerListViewNewState extends DataListViewState<CustomerModel> {
       height: 48,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [const Color(0xFF2FC27D), const Color(0xFF2FC27D).withOpacity(0.7)],
+          colors: [const Color(0xFF2FC27D), const Color(0xFF2FC27D).withValues(alpha: 0.7)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

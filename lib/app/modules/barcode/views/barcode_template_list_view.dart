@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../../data/models/barcode_template_model.dart';
 import '../controllers/barcode_template_controller.dart';
 
@@ -179,7 +178,7 @@ class BarcodeTemplateListView extends StatelessWidget {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF667eea).withOpacity(0.1),
+                                  color: const Color(0xFF667eea).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: const Text(

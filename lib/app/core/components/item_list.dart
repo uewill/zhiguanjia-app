@@ -85,11 +85,8 @@ class ItemList extends StatelessWidget {
         unit: item.selectedUnit ?? item.unit,
         quantity: item.quantity.value.toDouble(),
         price: item.price ?? 0,
-        amount: item.amount.value,
+        amount: item.subtotal,
         onQuantityChanged: (v) => onUpdateQuantity(index, v.toInt()),
-        onPriceChanged: item.price != null 
-            ? (v) => item.price = v 
-            : null,
         onDelete: () => onRemoveItem(index),
       )),
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// 商品信息展示卡片
 /// 用于单据明细中展示商品基本信息
@@ -115,7 +114,7 @@ class ProductInfoCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-            color: const Color(0xFF2FC27D).withOpacity(0.1),
+            color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
@@ -396,7 +395,7 @@ class ProductListTile extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: const Color(0xFF2FC27D).withOpacity(0.1),
+                color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(

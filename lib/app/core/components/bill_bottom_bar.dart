@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../bill/bill_type.dart';
 

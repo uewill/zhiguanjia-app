@@ -58,7 +58,7 @@ class PartnerSelector extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.1),
+                  color: primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -68,12 +68,12 @@ class PartnerSelector extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TDText(
-                            partner['name'] ?? partner.name ?? '',
+                            partner['name']?.toString() ?? '',
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          if (partner['contact'] != null || partner.contact != null)
+                          if (partner['contact'] != null)
                             TDText(
-                              '联系人: ${partner['contact'] ?? partner.contact ?? ''}',
+                              '联系人: ${partner['contact']}',
                               style: const TextStyle(fontSize: 12, color: Colors.grey),
                             ),
                         ],
@@ -138,10 +138,16 @@ class PartnerSelectorBottomSheet extends StatelessWidget {
           // 搜索框
           Padding(
             padding: const EdgeInsets.all(16),
-            child: TDInput(
-              leftLabel: '',
-              hintText: '搜索$title',
-              prefixIcon: const Icon(Icons.search),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: '搜索$title',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey.shade400),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+              ),
               onChanged: (v) {
                 controller.search?.call(v);
               },
@@ -168,12 +174,12 @@ class PartnerSelectorBottomSheet extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final item = items[index];
                   return ListTile(
-                    title: Text(item['name'] ?? item.name ?? ''),
-                    subtitle: item['contact'] != null || item.contact != null
-                        ? Text('联系人: ${item['contact'] ?? item.contact ?? ''}')
+                    title: Text(item['name']?.toString() ?? ''),
+                    subtitle: item['contact'] != null
+                        ? Text('联系人: ${item['contact']}')
                         : null,
-                    trailing: item['phone'] != null || item.phone != null
-                        ? Text(item['phone'] ?? item.phone ?? '')
+                    trailing: item['phone'] != null
+                        ? Text(item['phone']?.toString() ?? '')
                         : null,
                     onTap: () => onSelect(item),
                   );

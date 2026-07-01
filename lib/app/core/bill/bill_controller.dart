@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'bill_type.dart';
 import 'bill_base.dart';
@@ -10,22 +9,22 @@ abstract class BillCreatePageController {
   BillType get billType;
   
   /// 当前日期
-  final Rx<DateTime> billDate = DateTime.now().obs;
+  Rx<DateTime> get billDate;
   
   /// 预计日期（选填）
-  final Rxn<DateTime> expectedDate = Rxn<DateTime>();
+  Rxn<DateTime> get expectedDate;
   
   /// 备注
-  final RxString remark = ''.obs;
+  RxString get remark;
   
   /// 是否正在加载
-  final RxBool isLoading = false.obs;
+  RxBool get isLoading;
   
   /// 选择日期
-  void setBillDate(DateTime date) => billDate.value = date;
+  void setBillDate(DateTime date);
   
   /// 选择预计日期
-  void setExpectedDate(DateTime? date) => expectedDate.value = date;
+  void setExpectedDate(DateTime? date);
   
   /// 加载合作方列表（供应商/客户）
   Future<List<Map<String, dynamic>>> loadPartners();
@@ -110,6 +109,28 @@ class BillItem {
 
 /// 通用单据创建页面状态管理
 abstract class BillCreateController extends GetxController implements BillCreatePageController {
+  // 日期
+  @override
+  final Rx<DateTime> billDate = DateTime.now().obs;
+  
+  @override
+  final Rxn<DateTime> expectedDate = Rxn<DateTime>();
+  
+  // 备注
+  @override
+  final RxString remark = ''.obs;
+  
+  // 加载状态
+  @override
+  final RxBool isLoading = false.obs;
+  
+  // 日期设置方法
+  @override
+  void setBillDate(DateTime date) => billDate.value = date;
+  
+  @override
+  void setExpectedDate(DateTime? date) => expectedDate.value = date;
+  
   // 合作方
   final Rxn<Map<String, dynamic>> selectedPartner = Rxn<Map<String, dynamic>>();
   
@@ -119,6 +140,9 @@ abstract class BillCreateController extends GetxController implements BillCreate
   
   // 明细项列表
   final RxList<BillItem> items = <BillItem>[].obs;
+  
+  // 经办人/业务员
+  final Rxn<Map<String, dynamic>> selectedSalesman = Rxn<Map<String, dynamic>>();
   
   // 折扣和支付
   final RxDouble discountAmount = 0.0.obs;
@@ -133,6 +157,11 @@ abstract class BillCreateController extends GetxController implements BillCreate
   /// 选择合作方
   void selectPartner(Map<String, dynamic> partner) {
     selectedPartner.value = partner;
+  }
+
+  /// 选择经办人/业务员
+  void selectSalesman(Map<String, dynamic> salesman) {
+    selectedSalesman.value = salesman;
   }
 
   /// 选择仓库
@@ -170,6 +199,24 @@ abstract class BillCreateController extends GetxController implements BillCreate
       items[index].quantity.value = quantity;
       items.refresh();
     }
+  }
+
+  /// 更新明细项价格
+  void updateItemPrice(int index, double price) {
+    if (price < 0) return;
+    items[index] = BillItem(
+      id: items[index].id,
+      productId: items[index].productId,
+      productName: items[index].productName,
+      productCode: items[index].productCode,
+      unit: items[index].unit,
+      quantity: items[index].quantity.value,
+      price: price,
+      selectedUnit: items[index].selectedUnit,
+      unitRatio: items[index].unitRatio,
+      skuSpecs: items[index].skuSpecs,
+    );
+    items.refresh();
   }
 
   /// 删除明细项

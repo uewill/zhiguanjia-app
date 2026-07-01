@@ -49,7 +49,7 @@ extension ControllerLifecycle on GetxController {
   void safeRun(void Function() action, {void Function(Object)? onError}) {
     try {
       action();
-    } catch (e, stackTrace) {
+    } catch (e, _) {
       if (onError != null) {
         onError(e);
       }

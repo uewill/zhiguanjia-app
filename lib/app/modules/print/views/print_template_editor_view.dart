@@ -176,7 +176,7 @@ class PrintTemplateEditorView extends GetView<PrintTemplateEditorController> {
         width: 70,
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: const Color(0xFF2FC27D).withOpacity(0.1),
+          color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
@@ -238,7 +238,7 @@ class PrintTemplateEditorView extends GetView<PrintTemplateEditorController> {
           border: Border.all(color: Colors.grey[300]!),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -273,7 +273,7 @@ class PrintTemplateEditorView extends GetView<PrintTemplateEditorController> {
               width: isSelected ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(4),
-            color: isSelected ? const Color(0xFF2FC27D).withOpacity(0.05) : null,
+            color: isSelected ? const Color(0xFF2FC27D).withValues(alpha: 0.05) : null,
           ),
           child: Row(
             children: [

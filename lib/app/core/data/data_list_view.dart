@@ -184,7 +184,7 @@ class DataListViewState<T extends DataItem> extends State<DataListView<T>> {
       width: 48,
       height: 48,
       decoration: BoxDecoration(
-        color: config.primaryColor.withOpacity(0.1),
+        color: config.primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(config.icon, color: config.primaryColor),
@@ -245,10 +245,15 @@ class DataListViewState<T extends DataItem> extends State<DataListView<T>> {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            TDInput(
-              leftLabel: '',
-              hintText: '输入搜索关键词',
-              prefixIcon: const Icon(Icons.search),
+            TextField(
+              decoration: InputDecoration(
+                hintText: '输入搜索关键词',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+              ),
               onChanged: controller.search,
             ),
             const SizedBox(height: 16),

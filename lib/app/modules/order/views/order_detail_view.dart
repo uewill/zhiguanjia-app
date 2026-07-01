@@ -133,7 +133,7 @@ class OrderDetailView extends GetView<OrderController> {
       3: '已取消',
     };
     return Card(
-      color: colors[order.status]?.withOpacity(0.1),
+      color: colors[order.status]?.withValues(alpha: 0.1),
       child: ListTile(
         leading: Icon(Icons.info, color: colors[order.status]),
         title: Text(

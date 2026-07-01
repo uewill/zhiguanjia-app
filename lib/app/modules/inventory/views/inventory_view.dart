@@ -183,7 +183,7 @@ class InventoryView extends GetView<InventoryController> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFF7D00).withOpacity(0.1),
+                    color: const Color(0xFFFF7D00).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: const TDText('预警',
@@ -219,7 +219,7 @@ class InventoryView extends GetView<InventoryController> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2FC27D).withOpacity(0.1),
+                    color: const Color(0xFF2FC27D).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: const TDText('调整',
