@@ -48,7 +48,6 @@ class ApiService extends getx.GetxService {
       headers: {
         'Content-Type': 'application/json',
         'X-Tenant-ID': '1',
-        'Accept-Encoding': 'gzip',
       },
     ));
 
